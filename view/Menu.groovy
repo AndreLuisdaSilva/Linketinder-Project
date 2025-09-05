@@ -1,14 +1,16 @@
+
 package com.example.demo.exerciciosgroovy.Linketinder.view
 
 import com.example.demo.exerciciosgroovy.Linketinder.model.Candidato
 import com.example.demo.exerciciosgroovy.Linketinder.model.Empresa
+import java.util.Scanner
 
 class Menu {
 
-    private final BufferedReader reader
+    private final Scanner scanner
 
     Menu() {
-        this.reader = new BufferedReader(new InputStreamReader(System.in))
+        this.scanner = new Scanner(System.in)
     }
 
     int exibirMenuPrincipal() {
@@ -21,7 +23,11 @@ class Menu {
         print "Escolha uma opção: "
         
         try {
-            return reader.readLine().toInteger()
+            def line = scanner.nextLine()
+            if (line && !line.trim().isEmpty()) {
+                return line.toInteger()
+            }
+            return -1
         } catch (NumberFormatException e) {
             return -1
         }
@@ -61,14 +67,14 @@ class Menu {
 
     Map lerDadosNovoCandidato() {
         println "\n--- CADASTRO DE NOVO CANDIDATO ---"
-        print "Nome: "; def nome = reader.readLine()
-        print "Email: "; def email = reader.readLine()
-        print "CPF: "; def cpf = reader.readLine()
-        print "Idade: "; def idade = reader.readLine()
-        print "Estado (sigla): "; def estado = reader.readLine()
-        print "CEP: "; def cep = reader.readLine()
-        print "Descrição Pessoal: "; def descricao = reader.readLine()
-        print "Competências (separadas por vírgula): "; def comps = reader.readLine()
+        print "Nome: "; def nome = scanner.nextLine()
+        print "Email: "; def email = scanner.nextLine()
+        print "CPF: "; def cpf = scanner.nextLine()
+        print "Idade: "; def idade = scanner.nextLine()
+        print "Estado (sigla): "; def estado = scanner.nextLine()
+        print "CEP: "; def cep = scanner.nextLine()
+        print "Descrição Pessoal: "; def descricao = scanner.nextLine()
+        print "Competências (separadas por vírgula): "; def comps = scanner.nextLine()
         
         return [
             nome: nome, email: email, cpf: cpf, idade: idade as Integer, 
@@ -79,14 +85,14 @@ class Menu {
 
     Map lerDadosNovaEmpresa() {
         println "\n--- CADASTRO DE NOVA EMPRESA ---"
-        print "Nome da Empresa: "; def nome = reader.readLine()
-        print "Email Corporativo: "; def email = reader.readLine()
-        print "CNPJ: "; def cnpj = reader.readLine()
-        print "País: "; def pais = reader.readLine()
-        print "Estado (sigla): "; def estado = reader.readLine()
-        print "CEP: "; def cep = reader.readLine()
-        print "Descrição da Empresa: "; def descricao = reader.readLine()
-        print "Competências buscadas (separadas por vírgula): "; def comps = reader.readLine()
+        print "Nome da Empresa: "; def nome = scanner.nextLine()
+        print "Email Corporativo: "; def email = scanner.nextLine()
+        print "CNPJ: "; def cnpj = scanner.nextLine()
+        print "País: "; def pais = scanner.nextLine()
+        print "Estado (sigla): "; def estado = scanner.nextLine()
+        print "CEP: "; def cep = scanner.nextLine()
+        print "Descrição da Empresa: "; def descricao = scanner.nextLine()
+        print "Competências buscadas (separadas por vírgula): "; def comps = scanner.nextLine()
 
         return [
             nome: nome, email: email, cnpj: cnpj, pais: pais,
