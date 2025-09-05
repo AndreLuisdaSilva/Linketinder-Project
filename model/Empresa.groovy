@@ -1,4 +1,5 @@
-package model
+
+package com.example.demo.exerciciosgroovy.Linketinder.model
 import groovy.transform.ToString
 
 class Empresa extends Pessoa {

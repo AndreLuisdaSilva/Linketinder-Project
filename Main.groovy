@@ -1,5 +1,5 @@
-import controller.SistemaController
-import view.Menu
+import com.example.demo.exerciciosgroovy.Linketinder.controller.SistemaController
+import com.example.demo.exerciciosgroovy.Linketinder.view.Menu
 
 class Main {
     static void main(String[] args) {

@@ -1,7 +1,7 @@
-package view
+package com.example.demo.exerciciosgroovy.Linketinder.view
 
-import model.Candidato
-import model.Empresa
+import com.example.demo.exerciciosgroovy.Linketinder.model.Candidato
+import com.example.demo.exerciciosgroovy.Linketinder.model.Empresa
 
 class Menu {
 

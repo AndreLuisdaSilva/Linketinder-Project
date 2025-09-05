@@ -1,11 +1,11 @@
-package controller
+package com.example.demo.exerciciosgroovy.Linketinder.controller
 
-import model.Candidato
-import model.Empresa
-import view.Menu
+import com.example.demo.exerciciosgroovy.Linketinder.model.Candidato
+import com.example.demo.exerciciosgroovy.Linketinder.model.Empresa
+import com.example.demo.exerciciosgroovy.Linketinder.view.Menu
 
 class SistemaController {
-    
+
     private Menu view
     private List<Candidato> candidatos = []
     private List<Empresa> empresas = []
@@ -55,14 +55,14 @@ class SistemaController {
         empresas << new Empresa(nome: "Data Insights", email: "talentos@datainsights.com", cnpj: "04.004.004/0001-04", pais: "Brasil", estado: "SP", cep: "04500-004", descricao: "Análise de dados para o mercado.", competencias: ["Python", "SQL", "PowerBI", "Airflow"])
         empresas << new Empresa(nome: "Inova Web", email: "dev@inovaweb.com", cnpj: "05.005.005/0001-05", pais: "Brasil", estado: "PR", cep: "80100-005", descricao: "Desenvolvimento de aplicações web.", competencias: ["Groovy", "Grails", "React", "Java"])
     }
-    
-    
+
+
     private void cadastrarNovoCandidato() {
         Map dadosCandidato = view.lerDadosNovoCandidato()
         candidatos << new Candidato(dadosCandidato)
         view.exibirMensagem("Candidato cadastrado com sucesso!")
     }
-    
+
     private void cadastrarNovaEmpresa() {
         Map dadosEmpresa = view.lerDadosNovaEmpresa()
         empresas << new Empresa(dadosEmpresa)

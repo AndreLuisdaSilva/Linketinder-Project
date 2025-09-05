@@ -1,4 +1,4 @@
-package model
+package com.example.demo.exerciciosgroovy.Linketinder.model
 import groovy.transform.ToString
 
 abstract class Pessoa implements IPessoa{
