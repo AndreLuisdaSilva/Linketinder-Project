@@ -1,4 +1,3 @@
-
 # Linketinder (Groovy)
 
 ## Descrição
@@ -23,6 +22,40 @@ Existem duas maneiras principais de executar esta aplicação:
                 gradle run
         ```
     *   O menu da aplicação aparecerá no seu terminal.
+
+---
+
+## Banco de Dados
+
+O esquema do banco de dados está definido no arquivo `sql/linketinder.sql`. Este arquivo contém todas as instruções SQL necessárias para criar as tabelas e populá-las com dados iniciais.
+
+Quando o contêiner Docker é iniciado, este arquivo SQL é executado automaticamente para configurar o banco de dados.
+
+### Modelo de Dados
+
+O arquivo `sql/Diagrama sem nome.drawio` contém o diagrama entidade-relacionamento (DER) do banco de dados. Ele pode ser aberto com o [draw.io](https://app.diagrams.net/) para visualizar a estrutura e os relacionamentos entre as tabelas.
+
+## Docker
+
+Este projeto utiliza o Docker para criar um ambiente conteinerizado para o banco de dados PostgreSQL. O `Dockerfile` no diretório raiz do projeto é usado para construir a imagem Docker.
+
+### Construindo a Imagem
+
+Para construir a imagem Docker, execute o seguinte comando a partir da raiz do projeto:
+
+```sh
+docker build -t linketinder-db .
+```
+
+### Executando o Contêiner
+
+Para executar o contêiner Docker, use o seguinte comando:
+
+```sh
+docker run --name linketinder-container -p 5432:5432 -d linketinder-db
+```
+
+Isso iniciará um contêiner de banco de dados PostgreSQL e o script `linketinder.sql` será executado para inicializar o banco de dados.
 
 ---
 
