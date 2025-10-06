@@ -1,8 +1,9 @@
 package com.example.demo.exerciciosgroovy.Linketinder.model
 
-class Empresa extends Pessoa {
-    String cnpj
-    String country
+class Vacancy {
+    int id
+    String title
     String description
-    String password
+    int companyId
+    String location
 }
