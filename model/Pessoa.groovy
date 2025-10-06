@@ -1,22 +1,24 @@
 package com.example.demo.exerciciosgroovy.Linketinder.model
+
 import groovy.transform.ToString
 
-abstract class Pessoa implements IPessoa{
-    String nome;
-    String email;
-    String estado;
+abstract class Pessoa implements IPessoa {
+    String name
+    String email
+    String state
     String cep
-    List<String> competencias = []
+    List<String> skills = []
+    String description   // adicionado para o resumo
 
     String getResumo() {
-        def comp = competencias?.join(', ') ?: '-'
+        def skillsList = skills?.join(', ') ?: '-'
         return """
-        Nome: ${nome}
+        Name: ${name}
         E-mail: ${email}
-        Estado: ${estado}
+        State: ${state}
         CEP: ${cep}
-        Descrição: ${descricao}
-        Competências: ${comp}
+        Description: ${description}
+        Skills: ${skillsList}
         """.stripIndent().trim()
     }
 }
