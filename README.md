@@ -16,11 +16,11 @@ Existem duas maneiras principais de executar esta aplicação:
     *   Localize o arquivo `App.groovy` no caminho `src/main/java/com/example/demo/exerciciosgroovy/Linketinder/`.
     *   Execute o método `main` contido neste arquivo.
 
-2.  **Via Terminal (usando o Maven Wrapper):**
+2.  **Via Terminal (usando o grandle Wrapper):**
     *   Abra um terminal na pasta raiz do projeto.
     *   Execute o seguinte comando:
         ```bash
-        mvn spring-boot:run ou groovy Main.groovy
+                gradle run
         ```
     *   O menu da aplicação aparecerá no seu terminal.
 
