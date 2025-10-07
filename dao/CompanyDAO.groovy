@@ -1,3 +1,4 @@
+
 package com.example.demo.exerciciosgroovy.Linketinder.dao
 
 import com.example.demo.exerciciosgroovy.Linketinder.db.Database
@@ -7,14 +8,14 @@ import groovy.sql.Sql
 class CompanyDAO {
 
     static void save(Empresa company) {
-        def query = """INSERT INTO companies (name, email, description, cnpj, country, cep, password)
-                     VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT (email) DO NOTHING"""
+        def query = """INSERT INTO companies (name, email, description, cnpj, country, cep, password, state, skills)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (email) DO NOTHING"""
         def conn = Database.getConnection()
         def sql = new Sql(conn)
         sql.withTransaction {
             sql.execute(query, [
                 company.name, company.email, company.description,
-                company.cnpj, company.country, company.cep, company.password
+                company.cnpj, company.country, company.cep, company.password, company.state, company.skills.join(',')
             ])
         }
         conn.close()
@@ -30,7 +31,8 @@ class CompanyDAO {
             return new Empresa(
                 id: result.id, name: result.name, email: result.email,
                 description: result.description, cnpj: result.cnpj,
-                country: result.country, cep: result.cep, password: result.password
+                country: result.country, cep: result.cep, password: result.password,
+                state: result.state, skills: result.skills?.split(',') ?: []
             )
         }
         return null
@@ -44,7 +46,8 @@ class CompanyDAO {
             new Empresa(
                 id: row.id, name: row.name, email: row.email,
                 description: row.description, cnpj: row.cnpj,
-                country: row.country, cep: row.cep, password: row.password
+                country: row.country, cep: row.cep, password: row.password,
+                state: row.state, skills: row.skills?.split(',') ?: []
             )
         }
         conn.close()
@@ -52,14 +55,14 @@ class CompanyDAO {
     }
 
     static void update(Empresa company) {
-        def query = "UPDATE companies SET name = ?, email = ?, description = ?, cnpj = ?, country = ?, cep = ?, password = ? WHERE id = ?"
+        def query = "UPDATE companies SET name = ?, email = ?, description = ?, cnpj = ?, country = ?, cep = ?, password = ?, state = ?, skills = ? WHERE id = ?"
         def conn = Database.getConnection()
         def sql = new Sql(conn)
         sql.withTransaction {
             sql.execute(query, [
                 company.name, company.email, company.description,
                 company.cnpj, company.country, company.cep,
-                company.password, company.id
+                company.password, company.state, company.skills.join(','), company.id
             ])
         }
         conn.close()

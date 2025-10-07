@@ -41,10 +41,10 @@ class Menu {
         }
         candidatos.eachWithIndex { candidato, i ->
             println "Candidato #${i + 1}"
-            println "  Nome: ${candidato.nome}"
+            println "  Nome: ${candidato.name}"
             println "  Email: ${candidato.email}"
-            println "  Estado: ${candidato.estado}"
-            println "  Competências: ${candidato.competencias.join(', ')}"
+            println "  Estado: ${candidato.state ?: '-'}"
+            println "  Skills: ${candidato.skills?.join(', ') ?: '-'}"
             println "--------------------------------"
         }
     }
@@ -57,47 +57,49 @@ class Menu {
         }
         empresas.eachWithIndex { empresa, i ->
             println "Empresa #${i + 1}"
-            println "  Nome: ${empresa.nome}"
+            println "  Nome: ${empresa.name}"
             println "  Email: ${empresa.email}"
-            println "  País: ${empresa.pais}"
-            println "  Competências buscadas: ${empresa.competencias.join(', ')}"
+            println "  País: ${empresa.country}"
+            println "  Skills buscadas: ${empresa.skills?.join(', ') ?: '-'}"
             println "--------------------------------"
         }
     }
 
     Map lerDadosNovoCandidato() {
         println "\n--- CADASTRO DE NOVO CANDIDATO ---"
-        print "Nome: "; def nome = scanner.nextLine()
+        print "Nome: "; def name = scanner.nextLine()
         print "Email: "; def email = scanner.nextLine()
         print "CPF: "; def cpf = scanner.nextLine()
-        print "Idade: "; def idade = scanner.nextLine()
-        print "Estado (sigla): "; def estado = scanner.nextLine()
+        print "Idade: "; def age = scanner.nextLine()
+        print "Estado (sigla): "; def state = scanner.nextLine()
         print "CEP: "; def cep = scanner.nextLine()
-        print "Descrição Pessoal: "; def descricao = scanner.nextLine()
-        print "Competências (separadas por vírgula): "; def comps = scanner.nextLine()
+        print "Senha: "; def password = scanner.nextLine()
+        print "Descrição Pessoal: "; def personalDescription = scanner.nextLine()
+        print "Skills (separadas por vírgula): "; def comps = scanner.nextLine()
         
         return [
-            nome: nome, email: email, cpf: cpf, idade: idade as Integer, 
-            estado: estado, cep: cep, descricaoPessoal: descricao,
-            competencias: comps.split(',').collect { it.trim() }
+            name: name, email: email, cpf: cpf, age: age as Integer, 
+            state: state, cep: cep, password: password, personalDescription: personalDescription,
+            skills: comps.split(',').collect { it.trim() }
         ]
     }
 
     Map lerDadosNovaEmpresa() {
         println "\n--- CADASTRO DE NOVA EMPRESA ---"
-        print "Nome da Empresa: "; def nome = scanner.nextLine()
+        print "Nome da Empresa: "; def name = scanner.nextLine()
         print "Email Corporativo: "; def email = scanner.nextLine()
         print "CNPJ: "; def cnpj = scanner.nextLine()
-        print "País: "; def pais = scanner.nextLine()
-        print "Estado (sigla): "; def estado = scanner.nextLine()
+        print "País: "; def country = scanner.nextLine()
+        print "Estado (sigla): "; def state = scanner.nextLine()
         print "CEP: "; def cep = scanner.nextLine()
-        print "Descrição da Empresa: "; def descricao = scanner.nextLine()
-        print "Competências buscadas (separadas por vírgula): "; def comps = scanner.nextLine()
+        print "Senha: "; def password = scanner.nextLine()
+        print "Descrição da Empresa: "; def description = scanner.nextLine()
+        print "Skills buscadas (separadas por vírgula): "; def comps = scanner.nextLine()
 
         return [
-            nome: nome, email: email, cnpj: cnpj, pais: pais,
-            estado: estado, cep: cep, descricao: descricao,
-            competencias: comps.split(',').collect { it.trim() }
+            name: name, email: email, cnpj: cnpj, country: country,
+            state: state, cep: cep, password: password, description: description,
+            skills: comps.split(',').collect { it.trim() }
         ]
     }
     

@@ -1,3 +1,4 @@
+
 package com.example.demo.exerciciosgroovy.Linketinder.dao
 
 import com.example.demo.exerciciosgroovy.Linketinder.db.Database
@@ -9,8 +10,8 @@ class CandidateDAO {
     static void save(Candidato candidate) {
         def query = """
             INSERT INTO candidates 
-            (name, email, description, education, experience, cep, age, password, country) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (name, email, description, education, experience, cep, age, password, country, state, skills) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
         def conn = Database.getConnection()
         def sql = new Sql(conn)
@@ -18,7 +19,7 @@ class CandidateDAO {
             sql.execute(query, [
                 candidate.name, candidate.email, candidate.description,
                 candidate.education, candidate.experience, candidate.cep,
-                candidate.age, candidate.password, candidate.country
+                candidate.age, candidate.password, candidate.country, candidate.state, candidate.skills.join(',')
             ])
         }
         conn.close()
@@ -41,7 +42,9 @@ class CandidateDAO {
                 cep: result.cep,
                 age: result.age,
                 password: result.password,
-                country: result.country
+                country: result.country,
+                state: result.state,
+                skills: result.skills?.split(',') ?: []
             )
         }
         return null
@@ -62,7 +65,9 @@ class CandidateDAO {
                 cep: row.cep,
                 age: row.age,
                 password: row.password,
-                country: row.country
+                country: row.country,
+                state: row.state,
+                skills: row.skills?.split(',') ?: []
             )
         }
         conn.close()
@@ -73,7 +78,7 @@ class CandidateDAO {
         def query = """
             UPDATE candidates 
             SET name = ?, email = ?, description = ?, education = ?, 
-                experience = ?, cep = ?, age = ?, password = ?, country = ? 
+                experience = ?, cep = ?, age = ?, password = ?, country = ?, state = ?, skills = ? 
             WHERE id = ?
         """
         def conn = Database.getConnection()
@@ -82,7 +87,7 @@ class CandidateDAO {
             sql.execute(query, [
                 candidate.name, candidate.email, candidate.description,
                 candidate.education, candidate.experience, candidate.cep,
-                candidate.age, candidate.password, candidate.country, candidate.id
+                candidate.age, candidate.password, candidate.country, candidate.state, candidate.skills.join(','), candidate.id
             ])
         }
         conn.close()

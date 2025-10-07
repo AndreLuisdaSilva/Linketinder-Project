@@ -7,6 +7,8 @@ CREATE TABLE companies (
     country VARCHAR(50),
     cep VARCHAR(255),
     password VARCHAR(255) NOT NULL,
+    state VARCHAR(2),
+    skills TEXT,
     register_date DATE DEFAULT CURRENT_DATE
 );
 
@@ -20,7 +22,9 @@ CREATE TABLE candidates (
     cep VARCHAR(255),
     age INTEGER,
     password VARCHAR(255) NOT NULL,
-    country VARCHAR(50)
+    country VARCHAR(50),
+    state VARCHAR(2),
+    skills TEXT
 );
 
 CREATE TABLE vacancies (
@@ -62,33 +66,33 @@ CREATE TABLE candidate_like_vacancy (
     PRIMARY KEY (candidate_id, vacancy_id)
 );
 
-INSERT INTO companies (name, cnpj, email, description, country, cep, password) VALUES
-('''Tech Solutions''', '''11.111.111/0001-11''', '''contato@techsolutions.com''', '''Empresa de desenvolvimento de software''', '''Brasil''', '''11111-111''', '''senha123'''),
-('''Inova Corp''', '''22.222.222/0001-22''', '''contato@inovacorp.com''', '''Consultoria em TI''', '''Brasil''', '''22222-222''', '''senha456'''),
-('''Data Minds''', '''33.333.333/0001-33''', '''contato@dataminds.com''', '''Análise de dados e BI''', '''Brasil''', '''33333-333''', '''senha789'''),
-('''Creative Designs''', '''44.444.444/0001-44''', '''contato@creativedesigns.com''', '''Agência de design e marketing''', '''Brasil''', '''44444-444''', '''senhaabc'''),
-('''Project Builders''', '''55.555.555/0001-55''', '''contato@projectbuilders.com''', '''Gerenciamento de projetos''', '''Brasil''', '''55555-555''', '''senhadef''');
+INSERT INTO companies (name, cnpj, email, description, country, cep, password, state, skills) VALUES
+('Tech Solutions', '11.111.111/0001-11', 'contato@techsolutions.com', 'Empresa de desenvolvimento de software', 'Brasil', '11111-111', 'senha123', 'SP', 'Node.js,React,Java,Python'),
+('Inova Corp', '22.222.222/0001-22', 'contato@inovacorp.com', 'Consultoria em TI', 'Brasil', '22222-222', 'senha456', 'RJ', 'Java,AWS,Docker,Kubernetes'),
+('Data Minds', '33.333.333/0001-33', 'contato@dataminds.com', 'Análise de dados e BI', 'Brasil', '33333-333', 'senha789', 'MG', 'Python,SQL,PowerBI,Tableau'),
+('Creative Designs', '44.444.444/0001-44', 'contato@creativedesigns.com', 'Agência de design e marketing', 'Brasil', '44444-444', 'senhaabc', 'BA', 'Adobe Creative Suite,Figma,UX Research'),
+('Project Builders', '55.555.555/0001-55', 'contato@projectbuilders.com', 'Gerenciamento de projetos', 'Brasil', '55555-555', 'senhadef', 'PR', 'Agile,PMP,Jira,Confluence');
 
-INSERT INTO candidates (name, email, age, country, cep, description, education, experience, password) VALUES
-('''João Silva''', '''joao.silva@email.com''', 32, '''Brasil''', '''12345-678''', '''Desenvolvedor Full Stack''', '''Ciência da Computação''', '''5 anos de experiência com Node.js e React.''', '''senha123'''),
-('''Maria Santos''', '''maria.santos@email.com''', 29, '''Brasil''', '''23456-789''', '''Engenheira de Software''', '''Engenharia de Software''', '''Especialista em Java e sistemas distribuídos.''', '''senha456'''),
-('''Pedro Oliveira''', '''pedro.oliveira@email.com''', 35, '''Brasil''', '''34567-890''', '''Cientista de Dados''', '''Estatística''', '''Forte conhecimento em Python, R e Machine Learning.''', '''senha789'''),
-('''Ana Souza''', '''ana.souza@email.com''', 27, '''Brasil''', '''45678-901''', '''Designer UX/UI''', '''Design Gráfico''', '''Criação de interfaces intuitivas e modernas.''', '''senhaabc'''),
-('''Carlos Ferreira''', '''carlos.ferreira@email.com''', 30, '''Brasil''', '''56789-012''', '''Gerente de Projetos''', '''Administração''', '''Certificação PMP e experiência com metodologias ágeis.''', '''senhadef''');
+INSERT INTO candidates (name, email, age, country, cep, description, education, experience, password, state, skills) VALUES
+('João Silva', 'joao.silva@email.com', 32, 'Brasil', '12345-678', 'Desenvolvedor Full Stack', 'Ciência da Computação', '5 anos de experiência com Node.js e React.', 'senha123', 'SP', 'Node.js,React,SQL'),
+('Maria Santos', 'maria.santos@email.com', 29, 'Brasil', '23456-789', 'Engenheira de Software', 'Engenharia de Software', 'Especialista em Java e sistemas distribuídos.', 'senha456', 'RJ', 'Java,Docker,AWS'),
+('Pedro Oliveira', 'pedro.oliveira@email.com', 35, 'Brasil', '34567-890', 'Cientista de Dados', 'Estatística', 'Forte conhecimento em Python, R e Machine Learning.', 'senha789', 'MG', 'Python,R,Machine Learning,SQL'),
+('Ana Souza', 'ana.souza@email.com', 27, 'Brasil', '45678-901', 'Designer UX/UI', 'Design Gráfico', 'Criação de interfaces intuitivas e modernas.', 'senhaabc', 'BA', 'Figma,Sketch,Adobe XD'),
+('Carlos Ferreira', 'carlos.ferreira@email.com', 30, 'Brasil', '56789-012', 'Gerente de Projetos', 'Administração', 'Certificação PMP e experiência com metodologias ágeis.', 'senhadef', 'PR', 'Scrum,Kanban,Jira');
 
 
-INSERT INTO skills (name) VALUES ('''Python'''), ('''Java'''), ('''JavaScript'''), ('''SQL'''), ('''React'''), ('''Angular'''), ('''Node.js'''), ('''Docker'''), ('''AWS''');
+INSERT INTO skills (name) VALUES ('Python'), ('Java'), ('JavaScript'), ('SQL'), ('React'), ('Angular'), ('Node.js'), ('Docker'), ('AWS');
 
 INSERT INTO vacancies (title, description, location, company_id) VALUES
-('''Desenvolvedor Backend''', '''Desenvolvimento de APIs com Node.js''', '''Remoto''', 1),
-('''Engenheiro de Dados''', '''Criação de pipelines de dados com Python e SQL''', '''São Paulo''', 3),
-('''Desenvolvedor Frontend''', '''Desenvolvimento de interfaces com React''', '''Remoto''', 1);
+('Desenvolvedor Backend', 'Desenvolvimento de APIs com Node.js', 'Remoto', 1),
+('Engenheiro de Dados', 'Criação de pipelines de dados com Python e SQL', 'São Paulo', 3),
+('Desenvolvedor Frontend', 'Desenvolvimento de interfaces com React', 'Remoto', 1);
 
 INSERT INTO candidate_skills (candidate_id, skill_id, level) VALUES
-(1, 1, '''Avançado'''), (1, 3, '''Avançado'''), (1, 7, '''Avançado'''),
-(2, 2, '''Avançado'''), (2, 8, '''Intermediário'''),
-(3, 1, '''Avançado'''), (3, 4, '''Avançado'''),
-(4, 5, '''Intermediário'''), (4, 6, '''Básico''');
+(1, 1, 'Avançado'), (1, 3, 'Avançado'), (1, 7, 'Avançado'),
+(2, 2, 'Avançado'), (2, 8, 'Intermediário'),
+(3, 1, 'Avançado'), (3, 4, 'Avançado'),
+(4, 5, 'Intermediário'), (4, 6, 'Básico');
 
 INSERT INTO vacancy_skills (vacancy_id, skill_id) VALUES
 (1, 3), (1, 7),
