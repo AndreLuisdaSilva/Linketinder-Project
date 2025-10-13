@@ -1,0 +1,51 @@
+
+plugins {
+    id 'org.springframework.boot' version '3.2.1'
+    id 'io.spring.dependency-management' version '1.1.2'
+    id 'java'
+    id 'groovy'
+    id 'application'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Groovy
+    implementation 'org.codehaus.groovy:groovy:3.0.19'
+    implementation 'org.codehaus.groovy:groovy-sql:3.0.19'
+
+    // PostgreSQL
+    implementation 'org.postgresql:postgresql'
+
+    // Test dependencies
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
+    testImplementation 'org.spockframework:spock-spring:2.3-groovy-3.0'
+}
+
+application {
+    //com.example.demo.exerciciosgroovy.Linketinder.Main
+    //com.example.demo.exerciciosjava.K1T3Java.controller.TarefaController
+    mainClass.set('com.example.demo.exerciciosgroovy.Linketinder.Main')
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+run {
+    standardInput = System.in
+}
