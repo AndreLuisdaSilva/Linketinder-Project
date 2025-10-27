@@ -34,9 +34,15 @@ dependencies {
 }
 
 application {
-    //com.example.demo.exerciciosgroovy.Linketinder.Main
-    //com.example.demo.exerciciosjava.K1T3Java.controller.TarefaController
-    mainClass.set('com.example.demo.exerciciosgroovy.Linketinder.Main')
+    mainClass.set('com.example.demo.exerciciosgroovy.Linketinder.MainLinketinder')
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['.']
+        }
+    }
 }
 
 test {
