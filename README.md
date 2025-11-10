@@ -98,6 +98,6 @@ Isso iniciará um contêiner de banco de dados PostgreSQL e o script `linketinde
 
 ## Dicas e Recomendações do Projeto
 
-*   **Estrutura de Classes:** Foi criada uma interface `Ipessoa` e uma classe `Pessoa` abstrata para compartilhar atributos comuns entre `Candidato` (Pessoa Física) and `Empresa` (Pessoa Jurídica), que estendem a classe `Pessoa`.
+*   **Estrutura de Classes:** Foi criada uma interface `Ipessoa` e uma classe `Pessoa` abstrata para compartilhar atributos comuns entre `Candidato` (Pessoa Física) e `Empresa` (Pessoa Jurídica), que estendem a classe `Pessoa`.
 *   **Foco no MVP:** A aplicação se concentra nos requisitos mínimos para criar um produto viável, deixando funcionalidades mais complexas para iterações futuras.
 André Luis da Silva

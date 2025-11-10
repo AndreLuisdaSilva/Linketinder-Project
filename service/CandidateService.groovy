@@ -16,7 +16,32 @@ class CandidateService {
         return candidato
     }
 
+    Candidato updateCandidate(Long id, Map novosDados) {
+        Candidato candidatoExistente = findCandidateById(id) 
+
+        if (candidatoExistente) {
+            
+            candidatoExistente.name = novosDados.name ?: candidatoExistente.name
+            candidatoExistente.email = novosDados.email ?: candidatoExistente.email
+            candidatoExistente.age = novosDados.age ?: candidatoExistente.age
+            candidatoExistente.state = novosDados.state ?: candidatoExistente.state
+            candidatoExistente.cep = novosDados.cep ?: candidatoExistente.cep
+            candidatoExistente.skills = novosDados.skills ?: candidatoExistente.skills
+            candidatoExistente.description = novosDados.personalDescription ?: candidatoExistente.description
+
+            CandidateDAO.update(candidatoExistente)
+            return candidatoExistente
+
+        } else {
+            return null
+        }
+    }
+
     List<Candidato> getAllCandidates() {
         return candidateDAO.findAll()
+    }
+
+    Candidato findCandidateById(Long id) {
+        return candidateDAO.findById(id)
     }
 }

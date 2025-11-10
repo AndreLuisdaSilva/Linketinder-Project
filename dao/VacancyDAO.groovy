@@ -1,6 +1,6 @@
 package com.example.demo.exerciciosgroovy.Linketinder.dao
 
-import com.example.demo.exerciciosgroovy.Linketinder.db.Database
+import com.example.demo.exerciciosgroovy.Linketinder.db.ConnectionManager
 import com.example.demo.exerciciosgroovy.Linketinder.model.Vacancy
 import groovy.sql.Sql
 
@@ -8,7 +8,7 @@ class VacancyDAO {
 
     static void save(Vacancy vacancy) {
         def query = "INSERT INTO vacancies (title, description, company_id, location) VALUES (?, ?, ?, ?)"
-        def conn = Database.getConnection()
+        def conn = ConnectionManager.getInstance().getConnection()
         def sql = new Sql(conn)
         sql.withTransaction {
             sql.execute(query, [vacancy.title, vacancy.description, vacancy.companyId, vacancy.location])
@@ -18,7 +18,7 @@ class VacancyDAO {
 
     static Vacancy findById(int id) {
         def query = "SELECT * FROM vacancies WHERE id = ?"
-        def conn = Database.getConnection()
+        def conn = ConnectionManager.getInstance().getConnection()
         def sql = new Sql(conn)
         def result = sql.firstRow(query, [id])
         conn.close()
@@ -34,7 +34,7 @@ class VacancyDAO {
 
     static List<Vacancy> findAll() {
         def query = "SELECT * FROM vacancies"
-        def conn = Database.getConnection()
+        def conn = ConnectionManager.getInstance().getConnection()
         def sql = new Sql(conn)
         def results = sql.rows(query).collect { row ->
             new Vacancy(
@@ -49,7 +49,7 @@ class VacancyDAO {
 
     static void update(Vacancy vacancy) {
         def query = "UPDATE vacancies SET title = ?, description = ?, company_id = ?, location = ? WHERE id = ?"
-        def conn = Database.getConnection()
+        def conn = ConnectionManager.getInstance().getConnection()
         def sql = new Sql(conn)
         sql.withTransaction {
             sql.execute(query, [vacancy.title, vacancy.description, vacancy.companyId, vacancy.location, vacancy.id])
@@ -59,7 +59,7 @@ class VacancyDAO {
 
     static void delete(int id) {
         def query = "DELETE FROM vacancies WHERE id = ?"
-        def conn = Database.getConnection()
+        def conn = ConnectionManager.getInstance().getConnection()
         def sql = new Sql(conn)
         sql.withTransaction {
             sql.execute(query, [id])

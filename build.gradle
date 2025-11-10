@@ -16,10 +16,6 @@ repositories {
 }
 
 dependencies {
-    // Spring Boot
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
-
     // Groovy
     implementation 'org.codehaus.groovy:groovy:3.0.19'
     implementation 'org.codehaus.groovy:groovy-sql:3.0.19'

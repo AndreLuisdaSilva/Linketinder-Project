@@ -1,6 +1,6 @@
 package com.example.demo.exerciciosgroovy.Linketinder.dao
 
-import com.example.demo.exerciciosgroovy.Linketinder.db.Database
+import com.example.demo.exerciciosgroovy.Linketinder.db.ConnectionManager
 import com.example.demo.exerciciosgroovy.Linketinder.model.Skill
 import groovy.sql.Sql
 
@@ -8,7 +8,7 @@ class SkillDAO {
 
     static void save(Skill skill) {
         def query = "INSERT INTO skills (name) VALUES (?) ON CONFLICT (name) DO NOTHING"
-        def conn = Database.getConnection()
+        def conn = ConnectionManager.getInstance().getConnection()
         def sql = new Sql(conn)
         sql.withTransaction {
             sql.execute(query, [skill.name])
@@ -18,7 +18,7 @@ class SkillDAO {
 
     static Skill findById(int id) {
         def query = "SELECT * FROM skills WHERE id = ?"
-        def conn = Database.getConnection()
+        def conn = ConnectionManager.getInstance().getConnection()
         def sql = new Sql(conn)
         def result = sql.firstRow(query, [id])
         conn.close()
@@ -30,7 +30,7 @@ class SkillDAO {
 
     static List<Skill> findAll() {
         def query = "SELECT * FROM skills"
-        def conn = Database.getConnection()
+        def conn = ConnectionManager.getInstance().getConnection()
         def sql = new Sql(conn)
         def results = sql.rows(query).collect { row ->
             new Skill(id: row.id, name: row.name)
@@ -41,7 +41,7 @@ class SkillDAO {
 
     static void update(Skill skill) {
         def query = "UPDATE skills SET name = ? WHERE id = ?"
-        def conn = Database.getConnection()
+        def conn = ConnectionManager.getInstance().getConnection()
         def sql = new Sql(conn)
         sql.withTransaction {
             sql.execute(query, [skill.name, skill.id])
@@ -51,7 +51,7 @@ class SkillDAO {
 
     static void delete(int id) {
         def query = "DELETE FROM skills WHERE id = ?"
-        def conn = Database.getConnection()
+        def conn = ConnectionManager.getInstance().getConnection()
         def sql = new Sql(conn)
         sql.withTransaction {
             sql.execute(query, [id])
