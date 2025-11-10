@@ -4,7 +4,11 @@ import com.example.demo.exerciciosgroovy.Linketinder.dao.VacancyDAO
 import com.example.demo.exerciciosgroovy.Linketinder.model.Vacancy
 
 class VacancyService {
-    VacancyDAO vacancyDAO = new VacancyDAO()
+    VacancyDAO vacancyDAO 
+
+    VacancyService(VacancyDAO vacancyDAO){
+        this.vacancyDAO = vacancyDAO
+    }
 
     Vacancy createVacancy(String title, String description, int companyId, String location) {
         Vacancy vacancy = new Vacancy(title: title, description: description, companyId: companyId, location: location)
