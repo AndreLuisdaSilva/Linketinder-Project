@@ -29,7 +29,7 @@ class CandidateService {
             candidatoExistente.skills = novosDados.skills ?: candidatoExistente.skills
             candidatoExistente.description = novosDados.personalDescription ?: candidatoExistente.description
 
-            CandidateDAO.update(candidatoExistente)
+            candidateDAO.update(candidatoExistente)
             return candidatoExistente
 
         } else {
