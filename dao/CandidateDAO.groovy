@@ -8,7 +8,7 @@ import java.util.Optional
 
 class CandidateDAO {
 
-    static void save(Candidato candidate) {
+    boolean save(Candidato candidate) {
         String query = """
             INSERT INTO candidates
             (name, email, description, education, experience, cep, age, password, country, state, skills)
@@ -17,19 +17,20 @@ class CandidateDAO {
         Connection conn = ConnectionManager.getInstance().getConnection()
         try {
             Sql sql = new Sql(conn)
-            sql.withTransaction {
-                sql.execute(query, [
+            def result = sql.withTransaction {
+                sql.executeUpdate(query, [
                     candidate.name, candidate.email, candidate.description,
                     candidate.education, candidate.experience, candidate.cep,
                     candidate.age, candidate.password, candidate.country, candidate.state, candidate.skills.join(',')
                 ])
             }
+            return result > 0
         } finally {
             conn.close()
         }
     }
 
-    static Optional<Candidato> findById(Long id) {
+    Optional<Candidato> findById(Long id) {
         String query = "SELECT * FROM candidates WHERE id = ?"
         Connection conn = ConnectionManager.getInstance().getConnection()
         try {
@@ -56,7 +57,7 @@ class CandidateDAO {
         }
     }
 
-    static List<Candidato> findAll() {
+    List<Candidato> findAll() {
         String query = "SELECT * FROM candidates ORDER BY id"
         Connection conn = ConnectionManager.getInstance().getConnection()
         try {
@@ -82,7 +83,7 @@ class CandidateDAO {
         }
     }
 
-    static void update(Candidato candidate) {
+    boolean update(Candidato candidate) {
         String query = """
             UPDATE candidates
             SET name = ?, email = ?, description = ?, education = ?,
@@ -92,8 +93,8 @@ class CandidateDAO {
         Connection conn = ConnectionManager.getInstance().getConnection()
         try {
             Sql sql = new Sql(conn)
-            sql.withTransaction {
-                sql.execute(query, [
+            def result = sql.withTransaction {
+                sql.executeUpdate(query, [
                     candidate.name, candidate.email, candidate.description,
                     candidate.education, candidate.experience, candidate.cep,
                     candidate.age, candidate.password, candidate.country, candidate.state,
@@ -101,19 +102,21 @@ class CandidateDAO {
                     candidate.id
                 ])
             }
+            return result > 0
         } finally {
             conn.close()
         }
     }
 
-    static void delete(Long id) {
+    boolean delete(Long id) {
         String query = "DELETE FROM candidates WHERE id = ?"
         Connection conn = ConnectionManager.getInstance().getConnection()
         try {
             Sql sql = new Sql(conn)
-            sql.withTransaction {
-                sql.execute(query, [id])
+            def result = sql.withTransaction {
+                sql.executeUpdate(query, [id])
             }
+            return result > 0
         } finally {
             conn.close()
         }

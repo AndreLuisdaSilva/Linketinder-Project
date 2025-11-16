@@ -41,7 +41,7 @@ class Menu {
         println "\n--- GERENCIAR EMPRESAS ---"
         println "1. Listar Empresas"
         println "2. Cadastrar Nova Empresa"
-        println "3. Buscar Empresa por Nome"
+        println "3. Buscar Empresa por Id"
         println "4. Excluir Empresa"
         println "0. Voltar ao menu principal"
         print "Escolha uma opção: "
@@ -218,6 +218,17 @@ class Menu {
 
     Long lerIdCandidato() {
         print "Digite o ID do candidato: "
+        def idInput = scanner.nextLine()
+        try {
+            return idInput?.trim() ? idInput.trim() as Long : null
+        } catch (NumberFormatException e) {
+            println "ID inválido. Por favor, digite um número."
+            return null
+        }
+    }
+
+    Long lerIdEmpresa() {
+        print "Digite o ID da empresa: "
         def idInput = scanner.nextLine()
         try {
             return idInput?.trim() ? idInput.trim() as Long : null

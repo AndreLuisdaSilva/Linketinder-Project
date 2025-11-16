@@ -2,12 +2,13 @@ package com.example.demo.exerciciosgroovy.Linketinder.service
 
 import com.example.demo.exerciciosgroovy.Linketinder.dao.CandidateDAO
 import com.example.demo.exerciciosgroovy.Linketinder.model.Candidato
+import java.util.Optional
 
 class CandidateService {
     private CandidateDAO candidateDAO
 
-    CandidateService(CandidateDAO candidateDAO) {
-        this.candidateDAO = candidateDAO
+    CandidateService() {
+        this.candidateDAO = new CandidateDAO()
     }
 
     Candidato registerCandidate(Map candidateData) {
@@ -42,6 +43,11 @@ class CandidateService {
     }
 
     Candidato findCandidateById(Long id) {
-        return candidateDAO.findById(id)
+        Optional<Candidato> optionalCandidato = candidateDAO.findById(id)
+        return optionalCandidato.orElse(null)
+    }
+
+    boolean deleteCandidate(Long id) {
+        return candidateDAO.delete(id)
     }
 }

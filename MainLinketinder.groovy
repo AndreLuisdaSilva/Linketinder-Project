@@ -1,44 +1,29 @@
 package com.example.demo.exerciciosgroovy.Linketinder
 
-// Importe os novos controllers
-import com.example.demo.exerciciosgroovy.Linketinder.controller.Candidate
-import com.example.demo.exerciciosgroovy.Linketinder.controller.Company
-import com.example.demo.exerciciosgroovy.Linketinder.controller.SistemaController
-import com.example.demo.exerciciosgroovy.Linketinder.controller.Vacancy
+import org.eclipse.jetty.server.Server
+import org.eclipse.jetty.servlet.ServletContextHandler
+import org.eclipse.jetty.servlet.ServletHolder
 
-import com.example.demo.exerciciosgroovy.Linketinder.dao.CandidateDAO
-import com.example.demo.exerciciosgroovy.Linketinder.dao.CompanyDAO
-import com.example.demo.exerciciosgroovy.Linketinder.dao.VacancyDAO
-import com.example.demo.exerciciosgroovy.Linketinder.service.CandidateService
-import com.example.demo.exerciciosgroovy.Linketinder.service.CompanyService
-import com.example.demo.exerciciosgroovy.Linketinder.service.VacancyService
-import com.example.demo.exerciciosgroovy.Linketinder.view.Menu
+import com.example.demo.exerciciosgroovy.Linketinder.controller.CandidatoServlet
+import com.example.demo.exerciciosgroovy.Linketinder.controller.CompanyServlet
+import com.example.demo.exerciciosgroovy.Linketinder.controller.VacancyServlet
+//import com.example.demo.exerciciosgroovy.Linketinder.controller.TestServlet
 
 class MainLinketinder {
-
     static void main(String[] args) {
-        def menu = new Menu()
+        
+        def server = new Server(8080)
 
-        def candidateDAO = new CandidateDAO()
-        def companyDAO = new CompanyDAO()
-        def vacancyDAO = new VacancyDAO()
+        def context = new ServletContextHandler(ServletContextHandler.SESSIONS)
+        context.contextPath = "/"
 
-        def candidateService = new CandidateService(candidateDAO)
-        def companyService = new CompanyService(companyDAO)
-        def vacancyService = new VacancyService(vacancyDAO)
+        context.addServlet(new ServletHolder(new CandidatoServlet()), "/candidatos/*")
+        context.addServlet(new ServletHolder(new CompanyServlet()), "/empresas/*")
+        context.addServlet(new ServletHolder(new VacancyServlet()), "/vagas/*")
+        //context.addServlet(new ServletHolder(new TestServlet()), "/teste")
 
-
-        def Candidate = new Candidate(menu, candidateService)
-        def Company = new Company(menu, companyService)
-        def Vacancy = new Vacancy(menu, vacancyService)
-
-        def sistemaController = new SistemaController(
-                menu, 
-                Candidate, 
-                Company, 
-                Vacancy
-        )
-
-        sistemaController.iniciar()
+        server.handler = context
+        server.start()
+        server.join()
     }
 }

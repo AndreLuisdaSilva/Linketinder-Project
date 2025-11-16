@@ -20,7 +20,7 @@ class CompanyDAO {
         conn.close()
     }
 
-    static Empresa findById(int id) {
+    static Empresa findById(Long id) {
         def query = "SELECT * FROM companies WHERE id = ?"
         def conn = ConnectionManager.getInstance().getConnection()
         def sql = new Sql(conn)
@@ -61,13 +61,13 @@ class CompanyDAO {
             sql.execute(query, [
                 company.name, company.email, company.description,
                 company.cnpj, company.country, company.cep,
-                company.password, company.state, company.skills.join(','), company.id
+                company.password, company.state,  (company.skills ?: []).join(','), company.id
             ])
         }
         conn.close()
     }
 
-    static void delete(int id) {
+    static void delete(Long id) {
         def query = "DELETE FROM companies WHERE id = ?"
         def conn = ConnectionManager.getInstance().getConnection()
         def sql = new Sql(conn)

@@ -1,7 +1,68 @@
 
+// plugins {
+//     id 'java'
+//     id 'groovy'
+//     id 'war'
+//     id 'application'
+// }
+
+// group = 'com.example'
+// version = '0.0.1-SNAPSHOT'
+// sourceCompatibility = '17'
+
+// repositories {
+//     mavenCentral()
+// }
+
+// dependencies {
+
+//     implementation 'org.eclipse.jetty:jetty-server:10.0.20'
+//     implementation 'org.eclipse.jetty:jetty-servlet:10.0.20'
+//     // Groovy
+//     implementation 'org.codehaus.groovy:groovy:3.0.19'
+//     implementation 'org.codehaus.groovy:groovy-sql:3.0.19'
+//     implementation 'org.codehaus.groovy:groovy-all:3.0.19'
+//     // PostgreSQL
+//     implementation 'org.postgresql:postgresql:42.2.23'
+
+//     // Servlet API
+//     providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
+//      // 1. A API do Jakarta Servlet (define HttpServlet, WebServlet, etc.)
+//     implementation 'jakarta.servlet:jakarta.servlet-api:4.0.4' 
+    
+//     // 2. O módulo para o Jetty entender anotações como @WebServlet
+//     implementation 'org.eclipse.jetty:jetty-annotations:10.0.20'
+
+//     // Test dependencies
+//     testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
+// }
+
+// sourceSets {
+//     main {
+//         groovy {
+//             srcDirs = ['src/main/groovy']
+//         }
+//     }
+// }
+
+// test {
+//     useJUnitPlatform()
+//     testLogging {
+//         events "passed", "skipped", "failed"
+//     }
+// }
+
+// application {
+//     mainClass = 'com.example.demo.exerciciosgroovy.Linketinder.MainLinketinder'
+// }
+
+
+
+
+
+
+
 plugins {
-    id 'org.springframework.boot' version '3.2.1'
-    id 'io.spring.dependency-management' version '1.1.2'
     id 'java'
     id 'groovy'
     id 'application'
@@ -16,29 +77,45 @@ repositories {
 }
 
 dependencies {
-    // Groovy
-    implementation 'org.codehaus.groovy:groovy:3.0.19'
-    implementation 'org.codehaus.groovy:groovy-sql:3.0.19'
+    // --- Servidor Jetty (Manual) ---
+    implementation 'org.eclipse.jetty:jetty-server:10.0.20'
+    implementation 'org.eclipse.jetty:jetty-servlet:10.0.20'
+    implementation 'org.eclipse.jetty:jetty-io:10.0.20'
+    
+    // API do Jakarta Servlet (para HttpServlet, @WebServlet, etc.)
+    implementation 'jakarta.servlet:jakarta.servlet-api:4.0.4' 
+    
+    // Módulo do Jetty para entender anotações
+    implementation 'org.eclipse.jetty:jetty-annotations:10.0.20'
 
-    // PostgreSQL
-    implementation 'org.postgresql:postgresql'
+    // --- Groovy ---
+    // 'groovy-all' já inclui 'groovy' e 'groovy-sql', então só precisamos dele
+    implementation 'org.codehaus.groovy:groovy-all:3.0.19'
+    implementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
+    implementation 'org.jsoup:jsoup:1.15.3'
+    
+    // CORRIGIDO: Substituímos o 'javax.mail' antigo pelo 'jakarta.mail' novo
+    implementation 'com.sun.mail:jakarta.mail:2.0.1'
 
-    // Test dependencies
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // --- Banco de Dados ---
+    implementation 'org.postgresql:postgresql:42.7.3'
+
+    // --- Testes ---
     testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
-    testImplementation 'org.spockframework:spock-spring:2.3-groovy-3.0'
-}
 
-application {
-    mainClass.set('com.example.demo.exerciciosgroovy.Linketinder.MainLinketinder')
 }
 
 sourceSets {
     main {
         groovy {
-            srcDirs = ['.']
+            srcDirs = ['src/main/groovy']
+            exclude 'com/example/demo/exerciciosgroovy/K1-T11/**'
         }
     }
+}
+
+application {
+    mainClass.set('com.example.demo.exerciciosgroovy.Linketinder.MainLinketinder')
 }
 
 test {

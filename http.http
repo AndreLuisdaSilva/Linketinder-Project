@@ -1,0 +1,140 @@
+###
+# Candidatos
+###
+
+# @name getAllCandidates
+GET http://localhost:8080/candidatos
+
+###
+
+# @name getCandidateById
+GET http://localhost:8080/candidatos/6
+
+###
+
+# @name createCandidate
+POST http://localhost:8080/candidatos
+Content-Type: application/json
+
+{
+  "name": "Ada Lovelace",
+  "email": "ada@lovelace.com",
+  "description": "Programadora pioneira",
+  "state": "SP",
+  "cep": "12345-678",
+  "skills": ["Lógica", "Matemática", "Computação"],
+  "cpf": "123.456.789-00",
+  "age": 30,
+  "personalDescription": "Interessada em algoritmos",
+  "education": "Ciência da Computação",
+  "experience": "5 anos de experiência com Node.js e React",
+  "password": "senha123",
+  "country": "Brasil"
+}
+
+###
+
+# @name updateCandidate
+PUT http://localhost:8080/candidatos/10
+Content-Type: application/json
+
+{
+  "name": "Ada Lovelace2",
+  "skills": ["Python", "Algoritmos"],
+  "age": 31,
+  "education": "Engenharia de Computação",
+  "experience": "6 anos de experiência"
+}
+
+###
+
+# @name deleteCandidate
+DELETE http://localhost:8080/candidatos/14
+
+###
+# Empresas
+###
+
+# @name getAllCompanies
+GET http://localhost:8080/empresas
+
+###
+
+# @name getCompanyById
+GET http://localhost:8080/empresas/10
+
+###
+
+# @name createCompany
+POST http://localhost:8080/empresas
+Content-Type: application/json
+
+{
+  "name": "TechCorp",
+  "email": "contato@techcorp.com",
+  "password": "senha123",
+  "cnpj": "12.345.678/0001-99",
+  "description": "Empresa de tecnologia especializada em software",
+  "country": "Brasil",
+  "state": "SP",
+  "cep": "12345-678"
+}
+
+###
+
+# @name updateCompany
+PUT http://localhost:8080/empresas/8
+Content-Type: application/json
+
+{
+  "name": "TechCorp Updated",
+  "description": "Atualização da descrição da empresa",
+  "country": "Brasil",
+  "password": "novaSenha123"
+}
+
+###
+
+# @name deleteCompany
+DELETE http://localhost:8080/empresas/10
+
+###
+# Vagas
+###
+
+# @name getAllVacancies
+GET http://localhost:8080/vagas
+
+###
+
+# @name getVacancyById
+GET http://localhost:8080/vagas/1
+
+###
+
+# @name createVacancy
+POST http://localhost:8080/vagas
+Content-Type: application/json
+
+{
+  "companyId": 1,
+  "title": "Desenvolvedor Backend",
+  "description": "Desenvolvimento de APIs com Node.js",
+  "location": "Remoto"
+}
+
+###
+
+# @name updateVacancy
+PUT http://localhost:8080/vagas/4
+Content-Type: application/json
+
+{
+  "title": "Desenvolvedor Fullstack Senior",
+  "location": "Remoto"
+}
+
+###
+
+# @name deleteVacancy
+DELETE http://localhost:8080/vagas/4
