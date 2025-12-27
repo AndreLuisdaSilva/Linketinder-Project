@@ -3,14 +3,15 @@ package com.example.demo.exerciciosgroovy.Linketinder.dao
 import com.example.demo.exerciciosgroovy.Linketinder.db.ConnectionManager
 import com.example.demo.exerciciosgroovy.Linketinder.model.Empresa
 import groovy.sql.Sql
+import java.sql.Connection
 
 class CompanyDAO {
 
     static void save(Empresa company) {
-        def query = """INSERT INTO companies (name, email, description, cnpj, country, cep, password, state, skills)
+        String query = """INSERT INTO companies (name, email, description, cnpj, country, cep, password, state, skills)
                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (email) DO NOTHING"""
-        def conn = ConnectionManager.getInstance().getConnection()
-        def sql = new Sql(conn)
+        Connection conn = ConnectionManager.getInstance().getConnection()
+        Sql sql = new Sql(conn)
         sql.withTransaction {
             sql.execute(query, [
                 company.name, company.email, company.description,
@@ -21,9 +22,9 @@ class CompanyDAO {
     }
 
     static Empresa findById(Long id) {
-        def query = "SELECT * FROM companies WHERE id = ?"
-        def conn = ConnectionManager.getInstance().getConnection()
-        def sql = new Sql(conn)
+        String query = "SELECT * FROM companies WHERE id = ?"
+        Connection conn = ConnectionManager.getInstance().getConnection()
+        Sql sql = new Sql(conn)
         def result = sql.firstRow(query, [id])
         conn.close()
         if (result) {
@@ -38,10 +39,10 @@ class CompanyDAO {
     }
 
     static List<Empresa> findAll() {
-        def query = "SELECT * FROM companies"
-        def conn = ConnectionManager.getInstance().getConnection()
-        def sql = new Sql(conn)
-        def results = sql.rows(query).collect { row ->
+        String query = "SELECT * FROM companies"
+        Connection conn = ConnectionManager.getInstance().getConnection()
+        Sql sql = new Sql(conn)
+        List<Empresa> results = sql.rows(query).collect { row ->
             new Empresa(
                 id: row.id, name: row.name, email: row.email,
                 description: row.description, cnpj: row.cnpj,
@@ -54,9 +55,9 @@ class CompanyDAO {
     }
 
     static void update(Empresa company) {
-        def query = "UPDATE companies SET name = ?, email = ?, description = ?, cnpj = ?, country = ?, cep = ?, password = ?, state = ?, skills = ? WHERE id = ?"
-        def conn = ConnectionManager.getInstance().getConnection()
-        def sql = new Sql(conn)
+        String query = "UPDATE companies SET name = ?, email = ?, description = ?, cnpj = ?, country = ?, cep = ?, password = ?, state = ?, skills = ? WHERE id = ?"
+        Connection conn = ConnectionManager.getInstance().getConnection()
+        Sql sql = new Sql(conn)
         sql.withTransaction {
             sql.execute(query, [
                 company.name, company.email, company.description,
@@ -68,9 +69,9 @@ class CompanyDAO {
     }
 
     static void delete(Long id) {
-        def query = "DELETE FROM companies WHERE id = ?"
-        def conn = ConnectionManager.getInstance().getConnection()
-        def sql = new Sql(conn)
+        String query = "DELETE FROM companies WHERE id = ?"
+        Connection conn = ConnectionManager.getInstance().getConnection()
+        Sql sql = new Sql(conn)
         sql.withTransaction {
             sql.execute(query, [id])
         }

@@ -8,7 +8,7 @@ GET http://localhost:8080/candidatos
 ###
 
 # @name getCandidateById
-GET http://localhost:8080/candidatos/6
+GET http://localhost:8080/candidatos/5
 
 ###
 
@@ -49,7 +49,7 @@ Content-Type: application/json
 ###
 
 # @name deleteCandidate
-DELETE http://localhost:8080/candidatos/14
+DELETE http://localhost:8080/candidatos/8
 
 ###
 # Empresas
@@ -61,7 +61,7 @@ GET http://localhost:8080/empresas
 ###
 
 # @name getCompanyById
-GET http://localhost:8080/empresas/10
+GET http://localhost:8080/empresas/5
 
 ###
 
@@ -96,7 +96,7 @@ Content-Type: application/json
 ###
 
 # @name deleteCompany
-DELETE http://localhost:8080/empresas/10
+DELETE http://localhost:8080/empresas/6
 
 ###
 # Vagas
@@ -117,24 +117,140 @@ POST http://localhost:8080/vagas
 Content-Type: application/json
 
 {
-  "companyId": 1,
+  "companyId": 2,
   "title": "Desenvolvedor Backend",
+  "description": "Desenvolvimento de APIs com Node.js",
+  "location": "Remoto2"
+}
+
+###
+
+# @name updateVacancy
+PUT http://localhost:8080/vagas/1
+Content-Type: application/json
+
+{
+  "companyId": 1,
+  "title": "Desenvolvedor Fullstack Junior",
   "description": "Desenvolvimento de APIs com Node.js",
   "location": "Remoto"
 }
 
 ###
 
-# @name updateVacancy
-PUT http://localhost:8080/vagas/4
-Content-Type: application/json
+# @name deleteVacancy
+DELETE http://localhost:8080/vagas/13
 
-{
-  "title": "Desenvolvedor Fullstack Senior",
-  "location": "Remoto"
-}
+###
+# Likes
+###
+
+# @name candidateLikesVacancy
+POST http://localhost:8080/likes/candidate-likes-vacancy
+Content-Type: application/x-www-form-urlencoded
+
+candidateId=9&vacancyId=4
 
 ###
 
-# @name deleteVacancy
-DELETE http://localhost:8080/vagas/4
+# @name candidateLikesCompany
+POST http://localhost:8080/likes/candidate-likes-company
+Content-Type: application/x-www-form-urlencoded
+
+candidateId=9&companyId=5
+
+###
+
+# @name companyLikesCandidate
+POST http://localhost:8080/likes/company-likes-candidate
+Content-Type: application/x-www-form-urlencoded
+
+companyId=5&candidateId=9
+
+###
+# @name getAllSkills
+GET http://localhost:8080/skills
+
+
+###
+# @name getSkillById
+GET http://localhost:8080/skills/1
+
+
+###
+# @name createSkill_TypeScript
+POST http://localhost:8080/skills 
+Content-Type: application/json
+
+{ "name": "AWS" }
+
+###
+# @name updateSkill
+PUT http://localhost:8080/skills/1 
+Content-Type: application/json
+
+{ "name": "Java 17" }
+
+###
+# @name deleteSkill
+DELETE http://localhost:8080/skills/9
+
+### Candidatos (Associação de Skills)
+
+# @name addSkillToCandidate
+# Associa a Skill com ID 1 ao Candidato com ID 5
+POST http://localhost:8080/candidatos/5/skills 
+Content-Type: application/json
+
+{ "skillId": 1 }
+
+###
+# @name addAnotherSkillToCandidate
+#Associa a Skill com ID 2 ao Candidato com ID 5
+POST http://localhost:8080/candidatos/5/skills 
+Content-Type: application/json
+
+{ "skillId": 2 }
+
+###
+# @name getCandidateSkills
+#Lista apenas as skills do candidato 5
+GET http://localhost:8080/candidatos/5/skills
+
+###
+# @name removeSkillFromCandidate
+#Remove a Skill 1 do Candidato 5
+DELETE http://localhost:8080/candidatos/5/skills 
+Content-Type: application/json
+
+{ "skillId": 1 }
+
+###
+###Vagas (Associação de Skills)
+# @name addSkillToVacancy
+#Define que a Vaga 1 EXIGE a Skill 1
+POST http://localhost:8080/vagas/1/skills 
+Content-Type: application/json
+
+{ "skillId": 1 }
+
+###
+# @name addAnotherSkillToVacancy
+#Define que a Vaga 1 TAMBÉM EXIGE a Skill 2
+POST http://localhost:8080/vagas/1/skills 
+Content-Type: application/json
+
+{ "skillId": 2 }
+
+###
+# @name getVacancySkills
+#Lista as skills exigidas pela vaga 1
+GET http://localhost:8080/vagas/1/skills
+
+###
+# @name removeSkillFromVacancy
+#Remove a exigência da Skill 1 na Vaga 1
+DELETE http://localhost:8080/vagas/1/skills 
+Content-Type: application/json
+
+{ "skillId":7 }

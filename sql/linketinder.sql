@@ -54,16 +54,25 @@ CREATE TABLE vacancy_skills (
     PRIMARY KEY (vacancy_id, skill_id)
 );
 
-CREATE TABLE company_like_candidate (
-    candidate_id INTEGER REFERENCES candidates(id),
+CREATE TABLE company_candidates (
     company_id INTEGER REFERENCES companies(id),
-    PRIMARY KEY (candidate_id, company_id)
+    candidate_id INTEGER REFERENCES candidates(id),
+    liked BOOLEAN DEFAULT false,
+    PRIMARY KEY (company_id, candidate_id)
 );
 
-CREATE TABLE candidate_like_vacancy (
+CREATE TABLE candidate_vacancies (
     candidate_id INTEGER REFERENCES candidates(id),
     vacancy_id INTEGER REFERENCES vacancies(id),
+    liked BOOLEAN DEFAULT false,
     PRIMARY KEY (candidate_id, vacancy_id)
+);
+
+CREATE TABLE candidate_companies (
+    candidate_id INTEGER REFERENCES candidates(id),
+    company_id INTEGER REFERENCES companies(id),
+    liked BOOLEAN DEFAULT false,
+    PRIMARY KEY (candidate_id, company_id)
 );
 
 INSERT INTO companies (name, cnpj, email, description, country, cep, password, state, skills) VALUES
@@ -99,11 +108,14 @@ INSERT INTO vacancy_skills (vacancy_id, skill_id) VALUES
 (2, 1), (2, 4),
 (3, 5);
 
-INSERT INTO company_like_candidate(company_id, candidate_id) VALUES
-(1, 1), 
-(3, 3);
+INSERT INTO company_candidates(company_id, candidate_id, liked) VALUES
+(1, 1, true), 
+(3, 3, true);
 
-INSERT INTO candidate_like_vacancy(candidate_id, vacancy_id) VALUES
-(1, 1), 
-(2, 1), 
-(3, 2);
+INSERT INTO candidate_vacancies(candidate_id, vacancy_id, liked) VALUES
+(1, 1, true), 
+(2, 1, true), 
+(3, 2, true);
+
+INSERT INTO candidate_companies(candidate_id, company_id, liked) VALUES
+(1, 1, true);

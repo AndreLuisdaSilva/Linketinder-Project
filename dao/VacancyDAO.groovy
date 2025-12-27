@@ -8,8 +8,8 @@ import java.util.Optional
 
 class VacancyDAO {
 
-    boolean save(Vacancy vacancy) {
-        def query = "INSERT INTO vacancies (title, description, company_id, location) VALUES (?, ?, ?, ?)"
+    static boolean save(Vacancy vacancy) {
+        String query = "INSERT INTO vacancies (title, description, company_id, location) VALUES (?, ?, ?, ?)"
         Connection conn = ConnectionManager.getInstance().getConnection()
         try {
             Sql sql = new Sql(conn)
@@ -22,8 +22,8 @@ class VacancyDAO {
         }
     }
 
-    Optional<Vacancy> findById(Long id) {
-        def query = "SELECT * FROM vacancies WHERE id = ?"
+    static Optional<Vacancy> findById(Long id) {
+        String query = "SELECT * FROM vacancies WHERE id = ?"
         Connection conn = ConnectionManager.getInstance().getConnection()
         try {
             Sql sql = new Sql(conn)
@@ -40,9 +40,9 @@ class VacancyDAO {
         }
     }
 
-    List<Vacancy> findByCompanyId(int companyId) {
-        def query = "SELECT * FROM vacancies WHERE company_id = ?"
-        def conn = ConnectionManager.getInstance().getConnection()
+    static List<Vacancy> findByCompanyId(Long companyId) {
+        String query = "SELECT * FROM vacancies WHERE company_id = ?"
+        Connection conn = ConnectionManager.getInstance().getConnection()
         try {
             Sql sql = new Sql(conn)
             return sql.rows(query, [companyId]).collect { row ->
@@ -57,12 +57,12 @@ class VacancyDAO {
         }
     }
 
-    List<Vacancy> findAll() {
-        def query = "SELECT * FROM vacancies"
-        def conn = ConnectionManager.getInstance().getConnection()
+    static List<Vacancy> findAll() {
+        String query = "SELECT * FROM vacancies"
+        Connection conn = ConnectionManager.getInstance().getConnection()
         try {
             Sql sql = new Sql(conn)
-            def results = sql.rows(query).collect { row ->
+            List<Vacancy> results = sql.rows(query).collect { row ->
                 new Vacancy(
                     id: row.id, title: row.title,
                     description: row.description,
@@ -75,12 +75,12 @@ class VacancyDAO {
         }
     }
 
-    boolean update(Vacancy vacancy) {
-        def query = "UPDATE vacancies SET title = ?, description = ?, company_id = ?, location = ? WHERE id = ?"
+    static boolean update(Vacancy vacancy) {
+        String query = "UPDATE vacancies SET title = ?, description = ?, company_id = ?, location = ? WHERE id = ?"
         Connection conn = ConnectionManager.getInstance().getConnection()
         try {
             Sql sql = new Sql(conn)
-            def result = sql.withTransaction {
+            boolean result = sql.withTransaction {
                 sql.execute(query, [vacancy.title, vacancy.description, vacancy.companyId, vacancy.location, vacancy.id])
             }
             return result > 0
@@ -89,12 +89,12 @@ class VacancyDAO {
         }
     }
 
-    boolean delete(Long id) {
-        def query = "DELETE FROM vacancies WHERE id = ?"
+    static boolean delete(Long id) {
+        String query = "DELETE FROM vacancies WHERE id = ?"
         Connection conn = ConnectionManager.getInstance().getConnection()
         try {
             Sql sql = new Sql(conn)
-            def result = sql.withTransaction {
+            boolean result = sql.withTransaction {
                 sql.execute(query, [id])
             }
             return result > 0

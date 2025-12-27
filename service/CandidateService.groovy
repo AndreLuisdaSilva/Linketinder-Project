@@ -1,15 +1,13 @@
 package com.example.demo.exerciciosgroovy.Linketinder.service
 
 import com.example.demo.exerciciosgroovy.Linketinder.dao.CandidateDAO
+import com.example.demo.exerciciosgroovy.Linketinder.dao.CandidateSkillDAO
 import com.example.demo.exerciciosgroovy.Linketinder.model.Candidato
+import com.example.demo.exerciciosgroovy.Linketinder.model.Skill
 import java.util.Optional
 
 class CandidateService {
-    private CandidateDAO candidateDAO
-
-    CandidateService() {
-        this.candidateDAO = new CandidateDAO()
-    }
+    private CandidateDAO candidateDAO = new CandidateDAO()
 
     Candidato registerCandidate(Map candidateData) {
         def candidato = new Candidato(candidateData)
@@ -17,37 +15,49 @@ class CandidateService {
         return candidato
     }
 
-    Candidato updateCandidate(Long id, Map novosDados) {
-        Candidato candidatoExistente = findCandidateById(id) 
-
-        if (candidatoExistente) {
-            
-            candidatoExistente.name = novosDados.name ?: candidatoExistente.name
-            candidatoExistente.email = novosDados.email ?: candidatoExistente.email
-            candidatoExistente.age = novosDados.age ?: candidatoExistente.age
-            candidatoExistente.state = novosDados.state ?: candidatoExistente.state
-            candidatoExistente.cep = novosDados.cep ?: candidatoExistente.cep
-            candidatoExistente.skills = novosDados.skills ?: candidatoExistente.skills
-            candidatoExistente.description = novosDados.personalDescription ?: candidatoExistente.description
-
-            candidateDAO.update(candidatoExistente)
-            return candidatoExistente
-
-        } else {
-            return null
-        }
-    }
-
     List<Candidato> getAllCandidates() {
         return candidateDAO.findAll()
     }
 
     Candidato findCandidateById(Long id) {
-        Optional<Candidato> optionalCandidato = candidateDAO.findById(id)
-        return optionalCandidato.orElse(null)
+        Optional<Candidato> optional = candidateDAO.findById(id)
+        if (optional.isPresent()) {
+            Candidato cand = optional.get()
+            cand.skills = getSkillsByCandidateId(id)
+            return cand
+        }
+        return null
+    }
+
+    Candidato updateCandidate(Long id, Map novosDados) {
+        Candidato candidato = findCandidateById(id)
+        if (candidato) {
+            candidato.name = novosDados.name ?: candidato.name
+            candidato.email = novosDados.email ?: candidato.email
+            candidato.age = novosDados.age ?: candidato.age
+            candidato.state = novosDados.state ?: candidato.state
+            candidato.cep = novosDados.cep ?: candidato.cep
+            candidato.description = novosDados.personalDescription ?: candidato.description
+            
+            candidateDAO.update(candidato)
+            return candidato
+        }
+        return null
     }
 
     boolean deleteCandidate(Long id) {
         return candidateDAO.delete(id)
+    }
+
+    void addSkillToCandidate(Long candidateId, Long skillId) {
+        CandidateSkillDAO.addSkillToCandidate(candidateId.toInteger(), skillId.toInteger())
+    }
+
+    void removeSkillFromCandidate(Long candidateId, Long skillId) {
+        CandidateSkillDAO.removeSkillFromCandidate(candidateId.toInteger(), skillId.toInteger())
+    }
+
+    List<Skill> getSkillsByCandidateId(Long candidateId) {
+        return CandidateSkillDAO.findSkillsByCandidateId(candidateId.toInteger())
     }
 }

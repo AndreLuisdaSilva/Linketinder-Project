@@ -113,7 +113,7 @@ class CandidateDAO {
         Connection conn = ConnectionManager.getInstance().getConnection()
         try {
             Sql sql = new Sql(conn)
-            def result = sql.withTransaction {
+            boolean result = sql.withTransaction {
                 sql.executeUpdate(query, [id])
             }
             return result > 0
