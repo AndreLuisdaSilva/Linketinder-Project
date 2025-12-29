@@ -8,7 +8,7 @@ GET http://localhost:8080/candidatos
 ###
 
 # @name getCandidateById
-GET http://localhost:8080/candidatos/5
+GET http://localhost:8080/candidatos/2
 
 ###
 
@@ -149,7 +149,7 @@ DELETE http://localhost:8080/vagas/13
 POST http://localhost:8080/likes/candidate-likes-vacancy
 Content-Type: application/x-www-form-urlencoded
 
-candidateId=9&vacancyId=4
+candidateId=2&vacancyId=3
 
 ###
 
@@ -157,7 +157,7 @@ candidateId=9&vacancyId=4
 POST http://localhost:8080/likes/candidate-likes-company
 Content-Type: application/x-www-form-urlencoded
 
-candidateId=9&companyId=5
+candidateId=2&companyId=1
 
 ###
 
@@ -165,7 +165,7 @@ candidateId=9&companyId=5
 POST http://localhost:8080/likes/company-likes-candidate
 Content-Type: application/x-www-form-urlencoded
 
-companyId=5&candidateId=9
+companyId=1&candidateId=2
 
 ###
 # @name getAllSkills
@@ -199,10 +199,10 @@ DELETE http://localhost:8080/skills/9
 
 # @name addSkillToCandidate
 # Associa a Skill com ID 1 ao Candidato com ID 5
-POST http://localhost:8080/candidatos/5/skills 
+POST http://localhost:8080/candidatos/2/skills 
 Content-Type: application/json
 
-{ "skillId": 1 }
+{ "skillId": 4 }
 
 ###
 # @name addAnotherSkillToCandidate
@@ -254,3 +254,11 @@ DELETE http://localhost:8080/vagas/1/skills
 Content-Type: application/json
 
 { "skillId":7 }
+
+###
+# AFINIDADE (Linketinder Inteligente)
+###
+
+# @name getVacanciesWithAffinity
+# Lista todas as vagas, mostrando a % de match com o Candidato 5
+GET http://localhost:8080/vagas/afinidade/2

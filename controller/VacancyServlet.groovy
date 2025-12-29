@@ -1,6 +1,7 @@
 package com.example.demo.exerciciosgroovy.Linketinder.controller
 
 import com.example.demo.exerciciosgroovy.Linketinder.service.VacancyService
+import com.example.demo.exerciciosgroovy.Linketinder.service.MatchService
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 import javax.servlet.annotation.WebServlet
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse
 class VacancyServlet extends HttpServlet {
 
     private VacancyService vacancyService = new VacancyService()
+    private MatchService matchService = new MatchService() // Instância necessária para a afinidade
     private JsonSlurper jsonSlurper = new JsonSlurper()
 
     @Override
@@ -19,7 +21,7 @@ class VacancyServlet extends HttpServlet {
         String pathInfo = req.pathInfo
         resp.contentType = "application/json"
 
-        // GET /vagas -> Listar todas
+        // GET /vagas -> Listar todas (sem cálculo de afinidade)
         if (pathInfo == null || pathInfo == "/") {
             def vacancies = vacancyService.getAllVacancies()
             resp.writer.write(JsonOutput.toJson(vacancies))
@@ -29,14 +31,30 @@ class VacancyServlet extends HttpServlet {
         String[] parts = pathInfo.split("/")
 
         try {
+            // GET /vagas/afinidade/{candidateId}
+            if (parts.length > 2 && "afinidade".equals(parts[1])) {
+                Long candidateId = parts[2].toLong()
+                
+                def vacanciesWithAffinity = matchService.getVacanciesWithAffinity(candidateId)
+                
+                resp.writer.write(JsonOutput.toJson(vacanciesWithAffinity))
+                return
+            }
+            // ----------------------------------------
+
             Long id = parts[1].toLong()
 
-            //  GET /vagas/{id}/skills
+            // GET /vagas/{id}/skills -> Listar skills da vaga
             if (parts.length > 2 && "skills".equals(parts[2])) {
                 def skills = vacancyService.getSkillsByVacancyId(id)
                 resp.writer.write(JsonOutput.toJson(skills))
             } 
-            //  GET /vagas/{id}
+            // GET /vagas/{id}/candidatos -> (Opcional) Ver candidatos compatíveis
+            else if (parts.length > 2 && "candidatos".equals(parts[2])) {
+                def candidates = matchService.getCandidatesWithAffinityForVacancy(id)
+                resp.writer.write(JsonOutput.toJson(candidates))
+            }
+            // GET /vagas/{id} -> Detalhes da vaga simples
             else {
                 def vacancy = vacancyService.findVacancyById(id)
                 if (vacancy) {
@@ -46,7 +64,10 @@ class VacancyServlet extends HttpServlet {
                 }
             }
         } catch (NumberFormatException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido")
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido na URL")
+        } catch (Exception e) {
+            e.printStackTrace()
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro no servidor: ${e.message}")
         }
     }
 
@@ -55,21 +76,20 @@ class VacancyServlet extends HttpServlet {
         String pathInfo = req.pathInfo
         resp.contentType = "application/json"
 
-        // POST /vagas -> Cadastrar nova (Lógica Antiga)
+        // POST /vagas -> Cadastrar nova
         if (pathInfo == null || pathInfo == "/") {
             try {
-                def dadosVaga = jsonSlurper.parse(req.reader) as Map
-                vacancyService.registerVacancy(dadosVaga)
+                def vacancyData = jsonSlurper.parse(req.reader) as Map
+                def newVacancy = vacancyService.registerVacancy(vacancyData)
                 resp.setStatus(HttpServletResponse.SC_CREATED)
-                resp.writer.write(JsonOutput.toJson([message: "Vaga cadastrada com sucesso!"]))
+                resp.writer.write(JsonOutput.toJson(newVacancy))
             } catch (Exception e) {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Erro ao criar vaga: ${e.message}")
             }
             return
         }
 
-        // /vagas/{id}/skills -> Associar competência
-        // URL: .../vagas/1/skills | Body: { "skillId": 5 }
+        // POST /vagas/{id}/skills -> Adicionar Skill
         String[] parts = pathInfo.split("/")
         if (parts.length > 2 && "skills".equals(parts[2])) {
             try {
@@ -80,12 +100,12 @@ class VacancyServlet extends HttpServlet {
                 if (skillId) {
                     vacancyService.addSkillToVacancy(vacancyId, skillId)
                     resp.setStatus(HttpServletResponse.SC_CREATED)
-                    resp.writer.write(JsonOutput.toJson([message: "Competência adicionada à vaga com sucesso"]))
+                    resp.writer.write(JsonOutput.toJson([message: "Competência adicionada à vaga"]))
                 } else {
                     resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "skillId obrigatório")
                 }
             } catch (Exception e) {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Erro ao associar skill: ${e.message}")
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Erro: ${e.message}")
             }
         }
     }
@@ -113,7 +133,7 @@ class VacancyServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido")
         } catch (Exception e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Erro: ${e.message}")
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.message)
         }
     }
 
@@ -124,40 +144,36 @@ class VacancyServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID necessário")
             return
         }
-        
-        String[] parts = pathInfo.split("/")
-        
-        try {
-            Long id = parts[1].toLong()
 
-            // LÓGICA NOVA: DELETE /vagas/{id}/skills -> Remover skill
-            // Body: { "skillId": 5 }
+        String[] parts = pathInfo.split("/")
+        try {
+            Long vacancyId = parts[1].toLong()
+
+            // DELETE /vagas/{id}/skills
             if (parts.length > 2 && "skills".equals(parts[2])) {
                 try {
                     def body = jsonSlurper.parse(req.reader) as Map
                     Long skillId = body.skillId?.toLong()
-                    
                     if (skillId) {
-                        vacancyService.removeSkillFromVacancy(id, skillId)
+                        vacancyService.removeSkillFromVacancy(vacancyId, skillId)
                         resp.setStatus(HttpServletResponse.SC_NO_CONTENT)
                     } else {
                         resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "skillId necessário")
                     }
                 } catch (Exception e) {
-                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Erro ao remover skill: ${e.message}")
+                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.message)
                 }
                 return
             }
-
-            // LÓGICA ANTIGA: DELETE /vagas/{id} -> Excluir Vaga
-            if (vacancyService.deleteVacancy(id)) {
+            
+            // DELETE /vagas/{id}
+            if (vacancyService.deleteVacancy(vacancyId)) {
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT)
             } else {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Vaga não encontrada")
             }
-
-        } catch (NumberFormatException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido")
+        } catch (Exception e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Erro ao deletar")
         }
     }
 }
