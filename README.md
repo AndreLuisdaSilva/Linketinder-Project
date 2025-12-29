@@ -1,103 +1,91 @@
-# Linketinder (Groovy)
+# Linketinder – Backend API (Groovy)
 
 ## Descrição
 
-Este é um MVP (Minimum Viable Product) de uma aplicação de networking profissional, semelhante ao Tinder, mas para fins de recrutamento. O projeto foi desenvolvido em Groovy e permite o cadastro e a listagem de candidatos e empresas.
+O **Linketinder** é uma plataforma de recrutamento inovadora que conecta candidatos e empresas de forma inteligente.  
+Este projeto corresponde ao **Backend (API RESTful)** da aplicação, desenvolvido em **Groovy**, responsável pelo gerenciamento de dados, regras de negócio e persistência.
+
+O diferencial da plataforma é o sistema de **Match Mútuo** (inspirado no Tinder) e o cálculo automático do **Índice de Afinidade**, baseado nas competências (*skills*) dos candidatos e requisitos das vagas.
+
+---
+
+## Tecnologias Utilizadas
+
+- **Linguagem:** Groovy  
+- **Servidor Web:** Eclipse Jetty (Embedded)  
+- **Gerenciador de Dependências:** Gradle  
+- **Banco de Dados:** PostgreSQL  
+- **Arquitetura:** MVC com DAO (Data Access Object)  
+- **Infraestrutura:** Docker  
+
+---
+
+## Funcionalidades
+
+### Funcionalidades Principais
+
+- **CRUD Completo**
+  - Candidatos
+  - Empresas
+  - Vagas
+  - Competências (*Skills*)
+- **Gestão de Skills**
+  - Relacionamento N:N entre Candidatos ↔ Skills
+  - Relacionamento N:N entre Vagas ↔ Skills
+- **API REST**
+  - Endpoints padronizados
+  - Respostas em JSON
+
+### Inteligência de Negócio (Features)
+
+#### Índice de Afinidade (Algoritmo de Recomendação)
+
+- Ao listar vagas, o sistema calcula uma **porcentagem de compatibilidade (%)** para um candidato.
+- O cálculo é baseado na interseção entre:
+  - Skills do candidato
+  - Skills exigidas pela vaga
+- Normalização de dados:
+  - Ignora diferenças entre maiúsculas e minúsculas para maior precisão.
+
+#### Sistema de Match Mútuo
+
+- O **match** ocorre apenas quando há interesse recíproco:
+  - O candidato curte a vaga **e**
+  - A empresa curte o candidato
+- Suporte a **likes direcionados**:
+  - A empresa pode curtir um candidato especificamente para uma vaga.
 
 ---
 
 ## Como Executar o Projeto
 
-Existem duas maneiras principais de executar esta aplicação:
+### Pré-requisitos
 
-1.  **Através de uma IDE (Ambiente de Desenvolvimento Integrado):**
-    *   Importe o projeto para a sua IDE de preferência (IntelliJ, VS Code, etc.).
-    *   Localize o arquivo `App.groovy` no caminho `src/main/java/com/example/demo/exerciciosgroovy/Linketinder/`.
-    *   Execute o método `main` contido neste arquivo.
-
-2.  **Via Terminal (usando o grandle Wrapper):**
-    *   Abra um terminal na pasta raiz do projeto.
-    *   Execute o seguinte comando:
-        ```bash
-                gradle run
-        ```
-    *   O menu da aplicação aparecerá no seu terminal.
+- Java JDK 11 ou superior  
+- Gradle (ou Gradle Wrapper)  
+- PostgreSQL (local ou via Docker)  
 
 ---
 
-## Banco de Dados
+### Passo 1: Configurar o Banco de Dados (Docker)
 
-O esquema do banco de dados está definido no arquivo `sql/linketinder.sql`. Este arquivo contém todas as instruções SQL necessárias para criar as tabelas e populá-las com dados iniciais.
-
-Quando o contêiner Docker é iniciado, este arquivo SQL é executado automaticamente para configurar o banco de dados.
-
-### Modelo de Dados
-
-O arquivo `sql/Diagrama sem nome.drawio` contém o diagrama entidade-relacionamento (DER) do banco de dados. Ele pode ser aberto com o [draw.io](https://app.diagrams.net/) para visualizar a estrutura e os relacionamentos entre as tabelas.
-
-## Docker
-
-Este projeto utiliza o Docker para criar um ambiente conteinerizado para o banco de dados PostgreSQL. O `Dockerfile` no diretório raiz do projeto é usado para construir a imagem Docker.
-
-### Construindo a Imagem
-
-Para construir a imagem Docker, execute o seguinte comando a partir da raiz do projeto:
-
-```sh
+```bash
 docker build -t linketinder-db .
-```
-
-### Executando o Contêiner
-
-Para executar o contêiner Docker, use o seguinte comando:
-
-```sh
 docker run --name linketinder-container -p 5432:5432 -d linketinder-db
 ```
 
-Isso iniciará um contêiner de banco de dados PostgreSQL e o script `linketinder.sql` será executado para inicializar o banco de dados.
+---
+
+### Passo 2: Iniciar a Aplicação
+
+```bash
+gradle run
+```
+
+Servidor disponível em: `http://localhost:8080`
 
 ---
 
-## Requisitos Obrigatórios
+## Autor
 
-### Candidatos
-- [X] Manter um array com no mínimo 5 candidatos pré-cadastrados.
-- [X] Para cada candidato, salvar:
-  - Nome
-  - E-mail
-  - CPF
-  - Idade
-  - Estado
-  - CEP
-  - Descrição Pessoal
-- [X] Cada candidato deve ter um array de competências (ex: Python, Java, Spring Framework).
-
-### Empresas
-- [X] Manter um array com no mínimo 5 empresas pré-cadastradas.
-- [X] Para cada empresa, salvar:
-  - Nome
-  - E-mail Corporativo
-  - CNPJ
-  - País
-  - Estado
-  - CEP
-  - Descrição da Empresa
-- [X] Cada empresa deve ter um array de competências que ela busca nos candidatos.
-
-### Funcionalidades
-- [X] Implementar um menu simples no terminal.
-- [X] O menu deve ter a opção de listar todos os candidatos e todas as empresas.
-
----
-
-## Requisitos Opcionais
-- [X] Implementar a funcionalidade de cadastro de novos candidatos ou empresas.
-
----
-
-## Dicas e Recomendações do Projeto
-
-*   **Estrutura de Classes:** Foi criada uma interface `Ipessoa` e uma classe `Pessoa` abstrata para compartilhar atributos comuns entre `Candidato` (Pessoa Física) e `Empresa` (Pessoa Jurídica), que estendem a classe `Pessoa`.
-*   **Foco no MVP:** A aplicação se concentra nos requisitos mínimos para criar um produto viável, deixando funcionalidades mais complexas para iterações futuras.
-André Luis da Silva
+Desenvolvido por **André Luis da Silva**
